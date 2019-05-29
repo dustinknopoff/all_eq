@@ -1,0 +1,9 @@
+[package]
+name = "all_eq"
+version = "0.1.0"
+authors = ["Dustin Knopoff <dknopoff@carbonite.com>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+all_eq_derive = {path="../all_eq_derive"}

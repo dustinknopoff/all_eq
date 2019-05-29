@@ -1,0 +1,8 @@
+[package]
+name = "example"
+version = "0.1.0"
+authors = ["Dustin Knopoff <dknopoff@carbonite.com>"]
+edition = "2018"
+
+[dependencies]
+all_eq = { path = "../all_eq" }

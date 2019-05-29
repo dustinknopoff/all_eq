@@ -1,0 +1,2 @@
+[workspace]
+members = ["all_eq_derive", "all_eq", "example"]
