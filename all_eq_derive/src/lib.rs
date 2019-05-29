@@ -6,18 +6,18 @@ use syn::spanned::Spanned;
 use syn::{parse_macro_input, parse_quote, Data, DeriveInput, Fields, Index};
 
 #[proc_macro_derive(AllEq)]
-pub fn derive_heap_size(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn derive_alleq(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // Parse the input tokens into a syntax tree.
     let input = parse_macro_input!(input as DeriveInput);
 
     // Used in the quasi-quotation below as `#name`.
     let name = input.ident;
 
-    // Add a bound `T: HeapSize` to every type parameter T.
+    // get any generics/type info for use
     let generics = input.generics;
     let (impl_generics, ty_generics, where_clause) = generics.split_for_impl();
 
-    // Generate an expression to sum up the heap size of each field.
+    // Generate an expression to compare all fields of a struct.
     let comparers = all_comparisons(&input.data);
     let expanded = quote! {
         // The generated impl.
@@ -31,7 +31,7 @@ pub fn derive_heap_size(input: proc_macro::TokenStream) -> proc_macro::TokenStre
     proc_macro::TokenStream::from(expanded)
 }
 
-// Generate an expression to sum up the heap size of each field.
+// Generate an expression to compare all fields of a struct.
 fn all_comparisons(data: &Data) -> TokenStream {
     match *data {
         Data::Struct(ref data) => {
@@ -42,13 +42,6 @@ fn all_comparisons(data: &Data) -> TokenStream {
                     //    self.name == other.name && self.email == other.email
                     //
                     // but using fully qualified function call syntax.
-                    //
-                    // We take some care to use the span of each `syn::Field` as
-                    // the span of the corresponding `heap_size_of_children`
-                    // call. This way if one of the field types does not
-                    // implement `HeapSize` then the compiler's error message
-                    // underlines which field it is. An example is shown in the
-                    // readme of the parent directory.
                     let recurse = fields.named.iter().map(|f| {
                         let name = &f.ident;
                         quote_spanned! {f.span()=>
