@@ -3,7 +3,7 @@ extern crate proc_macro;
 use proc_macro2::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::spanned::Spanned;
-use syn::{parse_macro_input, parse_quote, Data, DeriveInput, Fields, Index};
+use syn::{parse_macro_input, Data, DeriveInput, Fields, Index};
 
 #[proc_macro_derive(AllEq)]
 pub fn derive_alleq(input: proc_macro::TokenStream) -> proc_macro::TokenStream {

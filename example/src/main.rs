@@ -1,35 +1,62 @@
+#![allow(dead_code)]
 use all_eq::{AllEq, all_eq};
 
-#[derive(Debug, AllEq, PartialEq)]
-struct Ex {
-    r: String,
-    num: i32,
-    is_real: IsReal
+type UUID = String;
+
+#[derive(Debug, AllEq)]
+struct Order {
+    product_id: UUID,
+    quantity: i32,
+    name: &'static str,
+    category: Category
 }
 
-#[derive(Debug, PartialEq)]
-enum IsReal {
-    Real,
-    Fake
+impl PartialEq for Order {
+    fn eq(&self, other: &Self) -> bool {
+        self.product_id == other.product_id
+    }
 }
 
-#[derive(Debug, AllEq, PartialEq)]
-struct Ex2((String, usize));
+#[derive(Debug, Eq)]
+enum Category {
+    Living,
+    Cooking,
+    Clothing,
+    Electronics
+}
 
 fn main() {
-    let ex1 = Ex { 
-        r: String::from("ma"), 
-        num: 22,
-        is_real: IsReal::Real
-        };
-    let ex2 = Ex {
-         r: String::from("ma"),
-         num: 22,
-         is_real: IsReal::Fake
-         };
-    all_eq!(ex1, ex2);
-
-    let ex3 = Ex2((String::from("fantasia"), 3usize));
-    let ex4 = Ex2((String::from("fantasia"), 3usize));
-    all_eq!(ex3, ex4);
+    let order1 = Order {
+      product_id: UUID::from("DCD20663-C1DB-434F-9A88-CABC5CDD7878"),
+        quantity: 1,
+        name: "Granite Pan",
+        category: Category::Cooking
+    };
+    let order2 = Order {
+        product_id: UUID::from("DCD20663-C1DB-434F-9A88-CABC5CDD7878"),
+        quantity: 14,
+        name: "Granite Pan",
+        category: Category::Cooking
+    };
+    // This will pass. In terms of equality we usually only care if 2 sheep have the same `product_id`
+    assert_eq!(order1, order2);
+    // This will cause a panic. Useful when testing in order to verify that the two objects have the same fields
+    // and not necessarily what they actually represent. Perhaps there is a side-effect in a hypothetical
+    // method call earlier that caused `order2.quantity` to be mutated when it shouldn't have.
+    all_eq!(order1, order2);
+    /*
+    thread 'main' panicked at 'assertion failed: `(left == right)`
+  left: `Order {
+    product_id: "DCD20663-C1DB-434F-9A88-CABC5CDD7878",
+    quantity: 1,
+    name: "Granite Pan",
+    category: Cooking,
+}`,
+ right: `Order {
+    product_id: "DCD20663-C1DB-434F-9A88-CABC5CDD7878",
+    quantity: 14,
+    name: "Granite Pan",
+    category: Cooking,
+}`', example/src/main.rs:45:5
+    */
 }
