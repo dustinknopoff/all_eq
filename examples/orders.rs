@@ -17,7 +17,7 @@ impl PartialEq for Order {
     }
 }
 
-#[derive(Debug, Eq)]
+#[derive(Debug, PartialEq)]
 enum Category {
     Living,
     Cooking,
@@ -27,7 +27,7 @@ enum Category {
 
 fn main() {
     let order1 = Order {
-      product_id: UUID::from("DCD20663-C1DB-434F-9A88-CABC5CDD7878"),
+        product_id: UUID::from("DCD20663-C1DB-434F-9A88-CABC5CDD7878"),
         quantity: 1,
         name: "Granite Pan",
         category: Category::Cooking
@@ -57,6 +57,6 @@ fn main() {
     quantity: 14,
     name: "Granite Pan",
     category: Cooking,
-}`', example/src/main.rs:45:5
+}`', example/src/orders.rs:45:5
     */
 }

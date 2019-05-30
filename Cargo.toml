@@ -1,2 +1,8 @@
-[workspace]
-members = ["all_eq_derive", "all_eq", "example"]
+[package]
+name = "all_eq" # the name of the package
+version = "0.1.0"    # the current version, obeying semver
+edition = "2018"
+
+[dependencies]
+all_eq_derive={path="./all_eq_derive"}
+

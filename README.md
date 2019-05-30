@@ -49,21 +49,7 @@ fn main() {
     // and not necessarily what they actually represent. Perhaps there is a side-effect in a hypothetical
     // method call earlier that caused `order2.quantity` to be mutated when it shouldn't have.
     all_eq!(order1, order2);
-    /*
-    thread 'main' panicked at 'assertion failed: `(left == right)`
-  left: `Order {
-    product_id: "DCD20663-C1DB-434F-9A88-CABC5CDD7878",
-    quantity: 1,
-    name: "Granite Pan",
-    category: Cooking,
-}`,
- right: `Order {
-    product_id: "DCD20663-C1DB-434F-9A88-CABC5CDD7878",
-    quantity: 14,
-    name: "Granite Pan",
-    category: Cooking,
-}`', example/src/main.rs:45:5
-    */
+    orders.rs
 }
 
 ```
@@ -125,7 +111,7 @@ Somehow, in the `send_order()` function, the `quantity` field gets set to **14**
 
 ### How does it work?
 
-The `AllEq` trait is dependent on all of a struct's fields having implemented `PartialEq` or `Eq`.
+The `AllEq` trait is dependent on all of a struct's fields having implemented `PartialEq`.
 For example if we removed the `PartialEq` derive from `Category`,
 
 ```bash
